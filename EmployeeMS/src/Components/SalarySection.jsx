@@ -67,6 +67,8 @@ const SalarySection = () => {
                   <td>{e.DOJ.split("T")[0]}</td> */}
                   <td>
                     <Link to={`/auth/dashboard/edit_salary/${e.id}`} className="btn btn-info btn-sm me-2">Add Salary</Link>
+                    <Link to={`/auth/dashboard/salary_slip/${e.id}`} className="btn btn-info btn-sm me-2">Salary Slip</  Link>
+
                     {/* <button className="btn btn-warning btn-sm" onClick={()=>handleDelete(e.id)}>Delete</button> */}
                   </td>
                 </tr>

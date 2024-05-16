@@ -210,5 +210,18 @@ router.post('/edit_salary', (req, res) => {
 });
 
 
+router.post('/salary_slip', (req, res) => {
+    const employeeId = req.body.id;
+    const sql = "SELECT * FROM salaryallowence WHERE id = ?";
+    con.query(sql, [employeeId], (err, result) => {
+      if (err) return res.json({ Status: false, Error: "Query Error" });
+      if (result.length === 0) {
+        return res.json({ Status: false, Error: "Employee not found" });
+      }
+      return res.json({ Status: true, Result: result });
+    });
+  });
+
+
 
 export { router as adminRouter };
