@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useReactToPrint } from 'react-to-print';
 
-
 const SalarySlip = () => {
     const [empData, setEmpData] = useState(null);
     const { id } = useParams();
@@ -20,9 +19,21 @@ const SalarySlip = () => {
         content: () => componentRef.current,
     });
 
+    const calculateNetPay = () => {
+        if (!empData) return 0;
+        return (
+            empData.current_salary +
+            empData.fuel_allowance +
+            empData.healthcare_allowance +
+            empData.present_allowance +
+            empData.other_allowance -
+            empData.deuction
+        );
+    };
+
     return (
         <div className="container mt-5">
-            <button onClick={handlePrint}>Print Slip</button>
+            <button onClick={handlePrint} className="btn btn-primary mb-3">Print Slip</button>
             {empData &&
                 <div className="card print-this-card-only" ref={componentRef}>
                     <div className="card-header text-center">
@@ -67,8 +78,12 @@ const SalarySlip = () => {
                                     <td>{empData.other_allowance}</td>
                                 </tr>
                                 <tr>
+                                    <td>Tax Deduction</td>
+                                    <td>{empData.deuction}</td>
+                                </tr>
+                                <tr>
                                     <td><strong>Net Pay</strong></td>
-                                    <td><strong>{empData.current_salary + empData.fuel_allowance + empData.healthcare_allowance + empData.present_allowance + empData.other_allowance}</strong></td>
+                                    <td><strong>{calculateNetPay()}</strong></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -82,5 +97,4 @@ const SalarySlip = () => {
     );
 };
 
-
-export default SalarySlip
+export default SalarySlip;

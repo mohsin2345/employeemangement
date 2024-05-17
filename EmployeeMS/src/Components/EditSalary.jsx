@@ -7,12 +7,12 @@ const EditSalary = () => {
   const [employee, setEmployee] = useState({
     name: "",
     currentsalaryallowence: "",
-    salary: "",
+    // salary: "",
     presentallowence: "",
     Healthcareallowence: "",
     fuelallowence:"",
     otherallowence: "",
-
+     deuction:"",
   });
 
   const [category, setCategory] = useState([])
@@ -34,8 +34,6 @@ const EditSalary = () => {
     axios.get('http://localhost:3000/auth/employee/' + id)
       .then(result => {
         console.log(result);
-        // Parse received date into "YYYY-MM-DD" forma
-        const parsedDate = receivedDate.split("-").map((part, index) => index === 0 ? part.padStart(4, "0") : part.padStart(2, "0")).join("-");
         setEmployee({
           ...employee,
           name: result.data.Result[0].name,
@@ -68,7 +66,7 @@ const EditSalary = () => {
               </div>
               <div className="col col-lg-6">
                 <label htmlFor="inputSalary" className="form-label">Current Salary</label>
-                <input type="text" className="form-control" id="inputSalary" placeholder="Enter Current Salary" autoComplete="off" value={employee.salary} onChange={(e) => setEmployee({ ...employee, salary: e.target.value })} />
+                <input type="text" className="form-control" id="inputSalary" placeholder="Enter Current Salary" autoComplete="off" value={employee.currentsalaryallowence} onChange={(e) => setEmployee({ ...employee, currentsalaryallowence: e.target.value })} />
               </div>
               <div className="col col-lg-6">
                 <label htmlFor="inputSalary" className="form-label">Healthcare Allowence </label>
@@ -85,6 +83,10 @@ const EditSalary = () => {
               <div className="col col-lg-6">
                 <label htmlFor="inputSalary" className="form-label">Other</label>
                 <input type="text" className="form-control" id="inputSalary" placeholder="Enter other" autoComplete="off" value={employee.otherallowence} onChange={(e) => setEmployee({ ...employee, otherallowence: e.target.value })} />
+              </div>
+              <div className="col col-lg-6">
+                <label htmlFor="inputSalary" className="form-label">Deduction</label>
+                <input type="text" className="form-control" id="inputSalary" placeholder="Enter deuction" autoComplete="off" value={employee.deuction} onChange={(e) => setEmployee({ ...employee, deuction: e.target.value })} />
               </div>
 
             </div>
