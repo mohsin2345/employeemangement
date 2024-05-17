@@ -175,15 +175,15 @@ router.get('/logout', (req, res) => {
 
 router.post('/edit_salary', (req, res) => {
     // Extracting data from the request body
-    const { id, name,   currentsalaryallowence,  presentallowence,  Healthcareallowence, fuelallowence,  otherallowence } = req.body;
+    const { id, name,   currentsalaryallowence,  presentallowence,  Healthcareallowence, fuelallowence,  otherallowence,deuction } = req.body;
 
     // Assuming you have a table named 'salary_allowances' with appropriate columns
 
     // SQL query to insert data into the 'salary_allowances' table
     const sql = `
         INSERT INTO salaryallowence
-        (id, name, current_salary,fuel_allowance, present_allowance, healthcare_allowance, other_allowance) 
-        VALUES (?, ?, ?, ?, ?, ?,?)
+        (id, name, current_salary,fuel_allowance, present_allowance, healthcare_allowance, other_allowance,deuction) 
+        VALUES (?, ?, ?, ?, ?, ?,?,?)
     `;
 
     // Values to be inserted into the table
@@ -195,6 +195,7 @@ router.post('/edit_salary', (req, res) => {
      Healthcareallowence,
      fuelallowence,
      otherallowence,
+     deuction,
     ];
 
     // Executing the query
