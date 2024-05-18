@@ -173,40 +173,32 @@ router.get('/logout', (req, res) => {
 })
 
 
+
+
 router.post('/edit_salary', (req, res) => {
-    // Extracting data from the request body
-    const { id, name,   currentsalaryallowence,  presentallowence,  Healthcareallowence, fuelallowence,  otherallowence,deuction } = req.body;
+    const { id, name, currentsalaryallowence, fuelallowence, presentallowence, Healthcareallowence, otherallowence, deuction, absentleave } = req.body;
 
-    // Assuming you have a table named 'salary_allowances' with appropriate columns
-
-    // SQL query to insert data into the 'salary_allowances' table
-    const sql = `
+    const query = `
         INSERT INTO salaryallowence
-        (id, name, current_salary,fuel_allowance, present_allowance, healthcare_allowance, other_allowance,deuction) 
-        VALUES (?, ?, ?, ?, ?, ?,?,?)
+        (id, name, current_salary, fuel_allowance, present_allowance, healthcare_allowance, other_allowance, deuction, absentleave) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE
+        current_salary = VALUES(current_salary),
+        fuel_allowance = VALUES(fuel_allowance),
+        present_allowance = VALUES(present_allowance),
+        healthcare_allowance = VALUES(healthcare_allowance),
+        other_allowance = VALUES(other_allowance),
+        deuction = VALUES(deuction),
+        absentleave = VALUES(absentleave)
     `;
 
-    // Values to be inserted into the table
-    const values = [
-     id,
-     name,
-     currentsalaryallowence,
-     presentallowence,
-     Healthcareallowence,
-     fuelallowence,
-     otherallowence,
-     deuction,
-    ];
-
-    // Executing the query
-    con.query(sql, values, (err, result) => {
+    con.query(query, [id, name, currentsalaryallowence, fuelallowence, presentallowence, Healthcareallowence, otherallowence, deuction, absentleave], (err, result) => {
         if (err) {
-            console.error("Error inserting data:", err);
-            return res.json({ Status: false, Error: err });
+            console.error(err);
+            res.status(500).json({ Status: false, Error: err.sqlMessage });
+        } else {
+            res.json({ Status: true });
         }
-
-        console.log("Salary allowance added successfully");
-        return res.json({ Status: true });
     });
 });
 
