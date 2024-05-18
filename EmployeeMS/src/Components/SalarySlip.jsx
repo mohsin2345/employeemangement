@@ -27,7 +27,8 @@ const SalarySlip = () => {
             empData.healthcare_allowance +
             empData.present_allowance +
             empData.other_allowance -
-            empData.deuction
+            empData.deuction -
+            empData.absentleave
         );
     };
 
@@ -36,8 +37,10 @@ const SalarySlip = () => {
             <button onClick={handlePrint} className="btn btn-primary mb-3">Print Slip</button>
             {empData &&
                 <div className="card print-this-card-only" ref={componentRef}>
-                    <div className="card-header text-center">
-                        <h3>Logic Racks</h3>
+                    <div className="card-header text-center bg-primary text-white">
+                        <h1>Logic Racks</h1>
+                        <h4>!Address!</h4>
+                        <h5>Plot 13D, 1st Floor, Commercial Block A, Sindhi Muslim Cooperative Housing Society Karachi!</h5>
                     </div>
                     <div className="card-body">
                         <div className="row">
@@ -46,11 +49,11 @@ const SalarySlip = () => {
                                 <p><strong>Employee ID:</strong> {id}</p>
                             </div>
                             <div className="col-md-6 text-right">
-                                <p><strong>Date:</strong> {new Date().toLocaleString().split(",")[0]}</p>
+                                <p><strong>Date:</strong> {new Date().toLocaleDateString()}</p>
                             </div>
                         </div>
                         <table className="table table-bordered mt-3">
-                            <thead>
+                            <thead className="thead-light">
                                 <tr>
                                     <th>Description</th>
                                     <th>Amount</th>
@@ -82,14 +85,18 @@ const SalarySlip = () => {
                                     <td>{empData.deuction}</td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Net Pay</strong></td>
-                                    <td><strong>{calculateNetPay()}</strong></td>
+                                    <td>Absent Leave</td>
+                                    <td>{empData.absentleave}</td>
+                                </tr>
+                                <tr className="font-weight-bold">
+                                    <td>Net Pay</td>
+                                    <td>{calculateNetPay()}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                     <div className="card-footer text-center">
-                        <p>Thank you for your hard work!</p>
+                        <p>Thank you LogicRacks!</p>
                     </div>
                 </div>
             }
