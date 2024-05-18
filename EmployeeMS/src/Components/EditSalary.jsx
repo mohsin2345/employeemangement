@@ -1,57 +1,46 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const EditSalary = () => {
-  const { id } = useParams()
+  const { id } = useParams();
   const [employee, setEmployee] = useState({
     name: "",
     currentsalaryallowence: "",
-    // salary: "",
     presentallowence: "",
     Healthcareallowence: "",
-    fuelallowence:"",
+    fuelallowence: "",
     otherallowence: "",
-     deuction:"",
+    deuction: "",
+    absentleave: "",
   });
 
-  const [category, setCategory] = useState([])
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://localhost:3000/auth/category')
+    axios.get(`http://localhost:3000/auth/employee/${id}`)
       .then(result => {
         if (result.data.Status) {
-          setCategory(result.data.Result);
+          setEmployee(result.data.Result[0]);
         } else {
-          console.log(result.data.Error)
+          console.log(result.data.Error);
         }
-      }).catch(err => console.log(err))
-
-  }, [])
-
-  useEffect(() => {
-    axios.get('http://localhost:3000/auth/employee/' + id)
-      .then(result => {
-        console.log(result);
-        setEmployee({
-          ...employee,
-          name: result.data.Result[0].name,
-        })
-      }).catch(err => console.log(err))
-  }, [])
+      })
+      .catch(err => console.log(err));
+  }, [id]);
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    axios.post(`http://localhost:3000/auth/edit_salary`, { ...employee, id })
+    e.preventDefault();
+    axios.post('http://localhost:3000/auth/edit_salary', { ...employee, id })
       .then(result => {
         if (result.data.Status) {
-          navigate('/auth/dashboard/employee')
+          navigate('/auth/dashboard/employee');
         } else {
-          console.log(result.data.Error)
+          console.log(result.data.Error);
         }
-      }).catch(err => console.log(err))
-  }
+      })
+      .catch(err => console.log(err));
+  };
 
   return (
     <div className="container mt-5">
@@ -62,45 +51,47 @@ const EditSalary = () => {
             <div className="row mb-3">
               <div className="col col-lg-6">
                 <label htmlFor="inputName" className="form-label">Name</label>
-                <input type="text" className="form-control" id="inputName" placeholder="Enter Name" value={employee.name} onChange={(e) => setEmployee({ ...employee, name: e.target.value })} />
+                <input type="text" className="form-control" id="inputName" placeholder="Enter Name" value={employee.name} onChange={(e) => setEmployee({ ...employee, name: e.target.value })} required />
               </div>
               <div className="col col-lg-6">
                 <label htmlFor="inputSalary" className="form-label">Current Salary</label>
-                <input type="text" className="form-control" id="inputSalary" placeholder="Enter Current Salary" autoComplete="off" value={employee.currentsalaryallowence} onChange={(e) => setEmployee({ ...employee, currentsalaryallowence: e.target.value })} />
+                <input type="text" className="form-control" id="inputSalary" placeholder="Enter Current Salary" autoComplete="off" value={employee.currentsalaryallowence} onChange={(e) => setEmployee({ ...employee, currentsalaryallowence: e.target.value })} required />
               </div>
               <div className="col col-lg-6">
-                <label htmlFor="inputSalary" className="form-label">Healthcare Allowence </label>
-                <input type="text" className="form-control" id="inputSalary" placeholder="Enter Healthcare" autoComplete="off" value={employee.Healthcareallowence} onChange={(e) => setEmployee({ ...employee, Healthcareallowence: e.target.value })} />
+                <label htmlFor="inputHealthcare" className="form-label">Healthcare Allowence</label>
+                <input type="text" className="form-control" id="inputHealthcare" placeholder="Enter Healthcare" autoComplete="off" value={employee.Healthcareallowence} onChange={(e) => setEmployee({ ...employee, Healthcareallowence: e.target.value })} required />
               </div>
               <div className="col col-lg-6">
-                <label htmlFor="inputSalary" className="form-label">Present Allowence</label>
-                <input type="text" className="form-control" id="inputSalary" placeholder="Enter Present" autoComplete="off" value={employee.presentallowence} onChange={(e) => setEmployee({ ...employee, presentallowence: e.target.value })} />
+                <label htmlFor="inputPresent" className="form-label">Present Allowence</label>
+                <input type="text" className="form-control" id="inputPresent" placeholder="Enter Present" autoComplete="off" value={employee.presentallowence} onChange={(e) => setEmployee({ ...employee, presentallowence: e.target.value })} required />
               </div>
               <div className="col col-lg-6">
-                <label htmlFor="inputSalary" className="form-label">Fuel Allowence</label>
-                <input type="text" className="form-control" id="inputSalary" placeholder="Enter Fuel" autoComplete="off" value={employee.fuelallowence} onChange={(e) => setEmployee({ ...employee, fuelallowence: e.target.value })} />
+                <label htmlFor="inputFuel" className="form-label">Fuel Allowence</label>
+                <input type="text" className="form-control" id="inputFuel" placeholder="Enter Fuel" autoComplete="off" value={employee.fuelallowence} onChange={(e) => setEmployee({ ...employee, fuelallowence: e.target.value })} required />
               </div>
               <div className="col col-lg-6">
-                <label htmlFor="inputSalary" className="form-label">Other</label>
-                <input type="text" className="form-control" id="inputSalary" placeholder="Enter other" autoComplete="off" value={employee.otherallowence} onChange={(e) => setEmployee({ ...employee, otherallowence: e.target.value })} />
+                <label htmlFor="inputOther" className="form-label">Other</label>
+                <input type="text" className="form-control" id="inputOther" placeholder="Enter other" autoComplete="off" value={employee.otherallowence} onChange={(e) => setEmployee({ ...employee, otherallowence: e.target.value })} required />
               </div>
               <div className="col col-lg-6">
-                <label htmlFor="inputSalary" className="form-label">Deduction</label>
-                <input type="text" className="form-control" id="inputSalary" placeholder="Enter deuction" autoComplete="off" value={employee.deuction} onChange={(e) => setEmployee({ ...employee, deuction: e.target.value })} />
+                <label htmlFor="inputDeduction" className="form-label">Deduction</label>
+                <input type="text" className="form-control" id="inputDeduction" placeholder="Enter deduction" autoComplete="off" value={employee.deuction} onChange={(e) => setEmployee({ ...employee, deuction: e.target.value })} required />
               </div>
-
+              <div className="col col-lg-6">
+                <label htmlFor="inputAbsent" className="form-label">Absent Leave</label>
+                <input type="text" className="form-control" id="inputAbsent" placeholder="Enter Absent leave" autoComplete="off" value={employee.absentleave} onChange={(e) => setEmployee({ ...employee, absentleave: e.target.value })} required />
+              </div>
             </div>
-
             <div className="row">
               <div className="col">
-                <button type="submit" className="btn btn-primary w-100">  Add Salary</button>
+                <button type="submit" className="btn btn-primary w-100">Add Salary</button>
               </div>
             </div>
           </form>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default EditSalary
+export default EditSalary;
