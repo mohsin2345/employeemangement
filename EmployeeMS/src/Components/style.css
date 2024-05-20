@@ -20,4 +20,27 @@ ul li :hover {
     height: 40px;
     border-radius: 50%;
 }
+/* Attendance.css */
+
+/* Style the table for better readability */
+.table th, .table td {
+    vertical-align: middle;
+  }
+  
+  /* Center align text in the header */
+  .table th {
+    text-align: center;
+  }
+  
+  /* Add some padding to the form controls */
+  .form-control, .form-check-input {
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  
+  /* Center align the submit button */
+  .text-center .btn {
+    margin-top: 10px;
+  }
+    
 

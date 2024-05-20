@@ -70,6 +70,15 @@ const Dashboard = () => {
                   <span className="ms-2 d-none d-sm-inline">Manage Salary</span>
                 </Link>
               </li>
+              <li className="w-100">
+                <Link
+                  to="/auth/dashboard/attendance"
+                  className="nav-link px-0 align-middle text-white"
+                >
+                  <i className="fs-4 bi-columns ms-2"></i>
+                  <span className="ms-2 d-none d-sm-inline">Attendence</span>
+                </Link>
+              </li>
              
               
               <li className="w-100">

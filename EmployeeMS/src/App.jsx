@@ -18,6 +18,8 @@ import PrivateRoute from './Components/PrivateRoute'
 import SalarySection from './Components/SalarySection'
 import EditSalary from './Components/EditSalary'
 import SalarySlip from './Components/SalarySlip'
+import Attendance from './Components/Attendance'
+
 
 function App() {
  
@@ -44,6 +46,8 @@ function App() {
       <Route path='/auth/dashboard/edit_employee/:id' element={<EditEmployee/>}></Route>
       <Route path='/auth/dashboard/edit_salary/:id' element={<EditSalary/>}></Route>
       <Route path='/auth/dashboard/salary_slip/:id' element={<SalarySlip/>}></Route>
+      <Route path='/auth/dashboard/attendance' element={<Attendance/>}></Route>
+
 
 
       <Route path='/auth/dashboard/manage_salary' element={<SalarySection/>}></Route>
