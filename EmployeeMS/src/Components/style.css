@@ -21,27 +21,39 @@ ul li :hover {
     border-radius: 50%;
 }
 /* Attendance.css */
+.attendance-form {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
-/* Style the table for better readability */
-.table th, .table td {
-    vertical-align: middle;
-  }
-  
-  /* Center align text in the header */
-  .table th {
-    text-align: center;
-  }
-  
-  /* Add some padding to the form controls */
-  .form-control, .form-check-input {
-    margin-top: 5px;
-    margin-bottom: 5px;
-  }
-  
-  /* Center align the submit button */
-  .text-center .btn {
-    margin-top: 10px;
-  }
+.form-input {
+  border-radius: 4px;
+}
+
+.form-check {
+  margin-top: 10px;
+}
+
+.attendance-form h1 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+button.w-100 {
+  background-color: #007bff;
+  border-color: #007bff;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 4px;
+}
+
+button.w-100:hover {
+  background-color: #0056b3;
+  border-color: #004085;
+}
+
   
     
 
