@@ -216,5 +216,59 @@ router.post('/salary_slip', (req, res) => {
   });
 
 
+  router.get('/attendance/:date', (req, res) => {
+    const dateStr = req.params.date;
+
+    const selectQuery = `
+        SELECT a.*, e.name AS employee_name
+        FROM attendance a
+        JOIN employees e ON a.employee_id = e.id
+        WHERE a.date = ?
+    `;
+    
+    con.query(selectQuery, [dateStr], (err, results) => {
+        if (err) {
+            console.error('Error fetching attendance:', err);
+            return res.json({ Status: false, Error: err.message });
+        }
+
+        return res.json({ Status: true, Result: results });
+    });
+});
+
+
+// Save attendance for a specific date
+router.post('/attendance', (req, res) => {
+    const { date, attendance } = req.body;
+    const dateStr = new Date(date).toISOString().split('T')[0];
+
+    // First, delete existing attendance records for the date
+    const deleteQuery = 'DELETE FROM attendance WHERE date = ?';
+    con.query(deleteQuery, [dateStr], (err) => {
+        if (err) {
+            console.error('Error deleting old attendance:', err);
+            return res.json({ Status: false, Error: err.message });
+        }
+
+        // Then, insert the new attendance records
+        const insertQuery = 'INSERT INTO attendance (date, employee_id, status) VALUES ?';
+        const attendanceData = attendance.map(emp => [dateStr, emp.employee_id, emp.status]);
+        console.log(attendance);
+
+        con.query(insertQuery, [attendanceData], (err) => {
+            if (err) {
+                console.error('Error saving attendance:', err);
+                return res.json({ Status: false, Error: err.message });
+            }
+
+            return res.json({ Status: true, Message: 'Attendance saved successfully' });
+        });
+    });
+});
+
+
+
+
+
 
 export { router as adminRouter };
