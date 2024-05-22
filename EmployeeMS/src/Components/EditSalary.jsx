@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const EditSalary = () => {
   const { id } = useParams();
@@ -34,12 +36,16 @@ const EditSalary = () => {
     axios.post('http://localhost:3000/auth/edit_salary', { ...employee, id })
       .then(result => {
         if (result.data.Status) {
-          navigate('/auth/dashboard/employee');
+          toast.success('Salary updated successfully!');
+          setTimeout(() => navigate('/auth/dashboard/employee'), 2000); // Navigate after 2 seconds
         } else {
-          console.log(result.data.Error);
+          toast.error(`Error: ${result.data.Error}`);
         }
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.error(err);
+        toast.error('An error occurred while updating the salary.');
+      });
   };
 
   return (
@@ -90,6 +96,7 @@ const EditSalary = () => {
           </form>
         </div>
       </div>
+      <ToastContainer /> {/* Toast container to show messages */}
     </div>
   );
 };

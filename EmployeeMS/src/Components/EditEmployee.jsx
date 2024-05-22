@@ -1,20 +1,22 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const EditEmployee = () => {
-  const { id } = useParams()
+  const { id } = useParams();
   const [employee, setEmployee] = useState({
     name: "",
     email: "",
     salary: "",
     address: "",
     category_id: "",
-    DOJ : "",
+    DOJ: "",
   });
 
-  const [category, setCategory] = useState([])
-  const navigate = useNavigate()
+  const [category, setCategory] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get('http://localhost:3000/auth/category')
@@ -22,11 +24,10 @@ const EditEmployee = () => {
         if (result.data.Status) {
           setCategory(result.data.Result);
         } else {
-          alert(result.data.Error)
+          toast.error(result.data.Error);
         }
-      }).catch(err => console.log(err))
-
-  }, [])
+      }).catch(err => console.log(err));
+  }, []);
 
   useEffect(() => {
     axios.get('http://localhost:3000/auth/employee/' + id)
@@ -43,21 +44,25 @@ const EditEmployee = () => {
           salary: result.data.Result[0].salary,
           DOJ: parsedDate, // set parsed date here
           category_id: result.data.Result[0].category_id,
-        })
-      }).catch(err => console.log(err))
-  }, [])
+        });
+      }).catch(err => console.log(err));
+  }, [id]);
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     axios.put(`http://localhost:3000/auth/edit_employee/${id}`, employee)
       .then(result => {
         if (result.data.Status) {
-          navigate('/auth/dashboard/employee')
+          toast.success('Employee updated successfully!');
+          setTimeout(() => navigate('/auth/dashboard/employee'), 2000); // Navigate after 2 seconds
         } else {
-          alert(result.data.Error)
+          toast.error(result.data.Error);
         }
-      }).catch(err => console.log(err))
-  }
+      }).catch(err => {
+        console.log(err);
+        toast.error('An error occurred while updating the employee.');
+      });
+  };
 
   return (
     <div className="container mt-5">
@@ -90,7 +95,7 @@ const EditEmployee = () => {
               </div>
               <div className="col">
                 <label htmlFor="category" className="form-label">Category</label>
-                <select name="category" id="category" className="form-select" onChange={(e) => setEmployee({ ...employee, category_id: e.target.value })}>
+                <select name="category" id="category" className="form-select" value={employee.category_id} onChange={(e) => setEmployee({ ...employee, category_id: e.target.value })}>
                   {category.map((c) => {
                     return <option key={c.id} value={c.id}>{c.name}</option>;
                   })}
@@ -105,8 +110,9 @@ const EditEmployee = () => {
           </form>
         </div>
       </div>
+      <ToastContainer /> {/* Toast container to show messages */}
     </div>
-  )
-}
+  );
+};
 
-export default EditEmployee
+export default EditEmployee;

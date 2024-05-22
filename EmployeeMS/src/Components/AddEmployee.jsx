@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddEmployee = () => {
   const [employee, setEmployee] = useState({
@@ -8,7 +10,7 @@ const AddEmployee = () => {
     email: "",
     password: "",
     salary: "",
-    DOJ:"",
+    DOJ: "",
     address: "",
     category_id: "",
     image: "",
@@ -23,7 +25,7 @@ const AddEmployee = () => {
         if (result.data.Status) {
           setCategory(result.data.Result);
         } else {
-          alert(result.data.Error);
+          toast.error(result.data.Error);
         }
       })
       .catch((err) => console.log(err));
@@ -40,22 +42,23 @@ const AddEmployee = () => {
     formData.append('DOJ', employee.DOJ);
     formData.append('image', employee.image);
     formData.append('category_id', employee.category_id);
-                
-    console.log(employee);
 
     axios.post('http://localhost:3000/auth/add_employee', formData)
       .then(result => {
         if (result.data.Status) {
-          navigate('/auth/dashboard/employee');
+          toast.success('Employee added successfully!');
+          setTimeout(() => navigate('/auth/dashboard/employee'), 2000); // Navigate after 2 seconds
         } else {
-          alert(result.data.Error);
+          toast.error(result.data.Error);
         }
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err);
+        toast.error('An error occurred while adding the employee.');
+      });
   };
 
   return (
-
     <div className="container mt-5">
       <h3 className="text-center mb-4">Add Employee</h3>
       <div className="row justify-content-center">
@@ -63,9 +66,8 @@ const AddEmployee = () => {
           <form onSubmit={handleSubmit} className="bg-light p-4 rounded">
             <div className="row mb-3">
               <div className="col-12 col-md-4">
-                <label htmlFor="inputName" className="form-label ">Name</label>
+                <label htmlFor="inputName" className="form-label">Name</label>
                 <input type="text" className="form-control" id="inputName" placeholder="Enter Name" onChange={(e) => setEmployee({ ...employee, name: e.target.value })} />
-                
               </div>
               <div className="col-12 col-md-4">
                 <label htmlFor="inputEmail4" className="form-label">Email</label>
@@ -82,8 +84,8 @@ const AddEmployee = () => {
                 <input type="text" className="form-control" id="inputSalary" placeholder="Enter Salary" autoComplete="off" onChange={(e) => setEmployee({ ...employee, salary: e.target.value })} />
               </div>
               <div className="col-12 col-md-4">
-                <label htmlFor="inputDOJ" className="form-label">Date of Joning</label>
-                <input type="Date" className="form-control" id="inputDOJ" placeholder="Enter DOJ" onChange={(e) => setEmployee({ ...employee, DOJ: e.target.value })} />
+                <label htmlFor="inputDOJ" className="form-label">Date of Joining</label>
+                <input type="date" className="form-control" id="inputDOJ" placeholder="Enter DOJ" onChange={(e) => setEmployee({ ...employee, DOJ: e.target.value })} />
               </div>
               <div className="col-12 col-md-4">
                 <label htmlFor="inputAddress" className="form-label">Address</label>
@@ -92,9 +94,9 @@ const AddEmployee = () => {
               <div className="col-12 col-md-4">
                 <label htmlFor="category" className="form-label">Category</label>
                 <select name="category" id="category" className="form-select" onChange={(e) => setEmployee({ ...employee, category_id: e.target.value })}>
-                  {category.map((c) => {
-                    return <option key={c.id} value={c.id}>{c.name}</option>;
-                  })}
+                  {category.map((c) => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -112,8 +114,8 @@ const AddEmployee = () => {
           </form>
         </div>
       </div>
+      <ToastContainer /> {/* Toast container to show messages */}
     </div>
-    
   );
 };
 
