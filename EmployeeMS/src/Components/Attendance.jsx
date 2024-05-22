@@ -3,6 +3,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AttendanceTable = () => {
     const [employees, setEmployees] = useState([]);
@@ -50,14 +52,14 @@ const AttendanceTable = () => {
         .then(response => {
             console.log(response);
             if (response.data.Status) {
-                console.log('Attendance saved successfully!');
+                toast.success('Attendance saved successfully!'); // Show success message
             } else {
-                console.log(response.data.Error);
+                toast.error(`Error: ${response.data.Error}`); // Show error message
             }
         })
         .catch(err => {
             console.error(err);
-            console.log('An error occurred while saving attendance.');
+            toast.error('An error occurred while saving attendance.'); // Show error message
         });
     };
 
@@ -101,6 +103,7 @@ const AttendanceTable = () => {
             <button className="btn btn-primary mt-4" onClick={saveAttendance}>
                 Save Attendance
             </button>
+            <ToastContainer /> {/* Toast container to show messages */}
         </div>
     );
 };
