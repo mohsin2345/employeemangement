@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const AttendanceTable = () => {
     const [employees, setEmployees] = useState([]);
     const [selectedDate, setSelectedDate] = useState(new Date());
+    const [attendanceType, setAttendanceType] = useState('');
 
     // Fetch employees on component mount
     useEffect(() => {
@@ -17,7 +18,7 @@ const AttendanceTable = () => {
                 if (result.data.Status) {
                     const updatedEmployees = result.data.Result.map(employee => ({
                         ...employee,
-                        status: 'Present' // Default status
+                        status: 'Present'
                     }));
                     setEmployees(updatedEmployees);
                 } else {
@@ -35,15 +36,28 @@ const AttendanceTable = () => {
         setEmployees(updatedEmployees);
     };
 
+    // Handle select all checkbox
+    const handleSelectAll = (status) => {
+        const updatedEmployees = employees.map(employee => ({
+            ...employee,
+            status: status
+        }));
+        setEmployees(updatedEmployees);
+    };
+
     // Save attendance data
     const saveAttendance = () => {
+        if (!attendanceType) {
+            toast.error('Please select attendance type.');
+            return;
+        }
+
         const attendanceData = employees.map(emp => ({
             employee_id: emp.id,
             status: emp.status,
-            date: selectedDate.toISOString().split('T')[0]
+            date: selectedDate.toISOString().split('T')[0],
+            type: attendanceType
         }));
-
-        console.log(attendanceData);
 
         axios.post('http://localhost:3000/auth/attendance', {
             date: selectedDate,
@@ -52,14 +66,14 @@ const AttendanceTable = () => {
         .then(response => {
             console.log(response);
             if (response.data.Status) {
-                toast.success('Attendance saved successfully!'); // Show success message
+                toast.success('Attendance saved successfully!');
             } else {
-                toast.error(`Error: ${response.data.Error}`); // Show error message
+                toast.error(`Error: ${response.data.Error}`);
             }
         })
         .catch(err => {
             console.error(err);
-            toast.error('An error occurred while saving attendance.'); // Show error message
+            toast.error('An error occurred while saving attendance.');
         });
     };
 
@@ -73,6 +87,26 @@ const AttendanceTable = () => {
                     onChange={(date) => setSelectedDate(date)}
                     className="mt-2 p-2 border border-gray-300 rounded"
                 />
+            </div>
+            <div className='mb-4'>
+                <label className='mr-2'>Attendance Type:</label>
+                <select
+                    value={attendanceType}
+                    onChange={(e) => {
+                        setAttendanceType(e.target.value);
+                        // Automatically check or uncheck all students based on the selected attendance type
+                        if (e.target.value === 'Check In') {
+                            handleSelectAll('Present');
+                        } else if (e.target.value === 'Check Out') {
+                            handleSelectAll('Absent');
+                        }
+                    }}
+                    className="p-2 border border-gray-300 rounded"
+                >
+                    <option value="">Select</option>
+                    <option value="Check In">Check In</option>
+                    <option value="Check Out">Check Out</option>
+                </select>
             </div>
             <table className="table table-bordered">
                 <thead className="thead-light">
@@ -103,7 +137,7 @@ const AttendanceTable = () => {
             <button className="btn btn-primary mt-4" onClick={saveAttendance}>
                 Save Attendance
             </button>
-            <ToastContainer /> {/* Toast container to show messages */}
+            <ToastContainer />
         </div>
     );
 };
