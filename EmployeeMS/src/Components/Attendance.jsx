@@ -78,35 +78,44 @@ const AttendanceTable = () => {
     };
 
     return (
+      
         <div className="container mt-5">
             <h2 className="mb-4">Attendance Table</h2>
-            <div className='my-4'>
-                <p className='p-0 m-0'>Select date:</p>
-                <DatePicker
-                    selected={selectedDate}
-                    onChange={(date) => setSelectedDate(date)}
-                    className="mt-2 p-2 border border-gray-300 rounded"
-                />
-            </div>
-            <div className='mb-4'>
-                <label className='mr-2'>Attendance Type:</label>
-                <select
-                    value={attendanceType}
-                    onChange={(e) => {
-                        setAttendanceType(e.target.value);
-                        // Automatically check or uncheck all students based on the selected attendance type
-                        if (e.target.value === 'Check In') {
-                            handleSelectAll('Present');
-                        } else if (e.target.value === 'Check Out') {
-                            handleSelectAll('Absent');
-                        }
-                    }}
-                    className="p-2 border border-gray-300 rounded"
-                >
-                    <option value="">Select</option>
-                    <option value="Check In">Check In</option>
-                    <option value="Check Out">Check Out</option>
-                </select>
+
+            <div className="d-flex justify-content-between items-center">
+                <div className='my-4'>
+                    <p className='p-0 m-0'>Select date:</p>
+                    <DatePicker
+                        selected={selectedDate}
+                        onChange={(date) => setSelectedDate(date)}
+                        className="mt-2 p-2 border border-gray-300 rounded"
+                    />
+                </div>
+                <div className='mb-4'>
+                    <label className="mb-2 d-block">Attendance Type: </label>
+                    <div className="btn-group" role="group" aria-label="Attendance Type">
+                        <button
+                            type="button"
+                            className={`btn btn-outline-primary ${attendanceType === 'Check In' ? 'active' : ''}`}
+                            onClick={() => {
+                                setAttendanceType('Check In');
+                                handleSelectAll('Check In');
+                            }}
+                        >
+                            Check In
+                        </button>
+                        <button
+                            type="button"
+                            className={`btn btn-outline-primary ${attendanceType === 'Check Out' ? 'active' : ''}`}
+                            onClick={() => {
+                                setAttendanceType('Check Out');
+                                handleSelectAll('Check Out');
+                            }}
+                        >
+                            Check Out
+                        </button>
+                    </div>
+                </div>
             </div>
             <table className="table table-bordered">
                 <thead className="thead-light">
